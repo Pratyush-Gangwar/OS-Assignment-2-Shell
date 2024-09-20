@@ -18,11 +18,6 @@ int launch_background(char* input) {
     return 0;
 }
 
-int launch_pipe(char* input) {
-    return 0;
-
-}
-
 int launch_normal(char* input) {
 
     // split modifies the original string so we must add the command to the history entry before splitting
@@ -44,7 +39,7 @@ int launch_normal(char* input) {
 
     int pid = fork();
     entry->pid = pid;
-    
+
     if (pid == 0) {
         exec_wrapper(args);
     } 

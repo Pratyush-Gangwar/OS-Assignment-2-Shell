@@ -22,6 +22,8 @@ int launch_background(char* input);
 int launch_pipe(char* input);
 int launch_normal(char* input);
 
+void exec_wrapper(char* args[]);
+
 void add_history_entry(struct history_entry* entry);
 void print_history_entry_names();
 void print_history_entry_details();
