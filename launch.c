@@ -11,11 +11,16 @@ int launch_pipe(char* input) {
 
 int launch_normal(char* input) {
     char* args[MAXLEN];
-    split(input, ' ', args);
+    split(input, " ", args);
 
-    if (execvp(args[0], args) == -1) {
-        perror("launch_normal execvp error: ");
-        exit(1);
+    if (fork() == 0) {
+
+        // execvp handles both /bin/ executables and custom user-made executables
+        if (execvp(args[0], args) == -1) { 
+            perror("launch_normal execvp error: ");
+            exit(1);
+        }
+
     }
 
     int wstatus;

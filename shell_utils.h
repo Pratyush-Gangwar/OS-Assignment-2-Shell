@@ -6,7 +6,7 @@
 
 #define MAXLEN 1000
 
-int split(char* input, char delim, char* output[]);
+int split(char* input, char* delim, char* output[]);
 
 int launch_background(char* input);
 int launch_pipe(char* input);
