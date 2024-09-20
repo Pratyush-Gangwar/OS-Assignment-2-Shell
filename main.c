@@ -1,9 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-
-#define MAXLEN 1000
+#include "shell_utils.h"
 
 void print_prompt() {
     char cwd[MAXLEN];
@@ -30,20 +25,6 @@ void print_prompt() {
 void read_user_input(char* input) {
     fgets(input, MAXLEN, stdin); // gets is deprecated
     input[ strlen(input) - 1 ] = '\0'; // last character is newline
-}
-
-int launch_background(char* input) {
-    return 0;
-}
-
-int launch_pipe(char* input) {
-    return 0;
-
-}
-
-int launch_normal(char* input) {
-    return 0;
-
 }
 
 int launch(char* input) {
