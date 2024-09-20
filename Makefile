@@ -1,2 +1,2 @@
 main.out : main.c
-	gcc main.c -o main.out
+	gcc main.c  -g -o main.out

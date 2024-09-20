@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 
 #define MAXLEN 1000
 
@@ -26,8 +27,9 @@ void print_prompt() {
     printf("%s@%s:%s$ ", username, machinename, cwd);
 }
 
-void read_user_input() {
-
+void read_user_input(char* input) {
+    fgets(input, MAXLEN, stdin); // gets is deprecated
+    input[ strlen(input) - 1 ] = '\0'; // last character is newline
 }
 
 int launch() {
@@ -36,10 +38,11 @@ int launch() {
 
 void shell_loop() {
     int status;
+    char input[MAXLEN];
 
     do {
         print_prompt();
-        read_user_input();
+        read_user_input(input);
         status = launch();
     } while (status != 0);
 
