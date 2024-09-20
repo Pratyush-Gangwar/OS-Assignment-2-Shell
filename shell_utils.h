@@ -28,4 +28,8 @@ void add_history_entry(struct history_entry* entry);
 void print_history_entry_names();
 void print_history_entry_details();
 
+void set_entry_command(char* input, struct history_entry* entry);
+void set_entry_start(struct history_entry* entry);
+void set_entry_end(struct history_entry* entry);
+
 void setup_signal_handlers();

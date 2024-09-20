@@ -2,8 +2,9 @@
 
 int fd[MAXLEN/2][2];
 
-void launch_first_pipe(char* first_command, int num_pipes) {
-    if (fork() == 0) {
+int launch_first_pipe(char* first_command, int num_pipes) {
+    int pid = fork();
+    if (pid == 0) {
         dup2( fd[0][1], STDOUT_FILENO );
         close(fd[0][0]);
 
@@ -16,6 +17,8 @@ void launch_first_pipe(char* first_command, int num_pipes) {
         split(first_command, " ", args);
         exec_wrapper(args);
     }
+
+    return pid;
 }
 
 void launch_last_pipe(char* last_command, int num_pipes) {
@@ -36,18 +39,7 @@ void launch_last_pipe(char* last_command, int num_pipes) {
     }
 } 
 
-int launch_pipe(char* input) {
-
-    char* pipe_commands[MAXLEN];
-    int num_pipe_commands = split(input, "|", pipe_commands);
-    int num_pipes = num_pipe_commands - 1;
-
-    for(int i = 0; i < num_pipes; i++) {
-        pipe(fd[i]);
-    }
-
-    launch_first_pipe(pipe_commands[0], num_pipes);
-
+void launch_intermediate_pipes(char* pipe_commands[], int num_pipe_commands, int num_pipes) {
     for(int i = 1; i < num_pipe_commands - 1; i++) {
         if (fork() == 0) {
             dup2( fd[i - 1][0], STDIN_FILENO );
@@ -70,7 +62,45 @@ int launch_pipe(char* input) {
         }
 
     }
+}
 
+int wait_for_all(int num_pipe_commands) {
+    int status = 0;
+    for(int i = 0; i < num_pipe_commands; i++) {
+        int wstatus;
+        wait(&wstatus);
+
+        if (WIFEXITED(wstatus)) {
+
+            if (WEXITSTATUS(wstatus) != 0) {
+                wstatus = WEXITSTATUS(wstatus);
+            }
+
+        }
+    }
+
+    return status;
+}
+
+int launch_pipe(char* input) {
+
+    struct history_entry* entry = malloc(sizeof(struct history_entry));
+    set_entry_command(input, entry);
+
+    char* pipe_commands[MAXLEN];
+    int num_pipe_commands = split(input, "|", pipe_commands);
+    int num_pipes = num_pipe_commands - 1;
+
+    for(int i = 0; i < num_pipes; i++) {
+        pipe(fd[i]);
+    }
+
+    set_entry_start(entry);
+
+    int pid = launch_first_pipe(pipe_commands[0], num_pipes);
+    entry->pid = pid;
+
+    launch_intermediate_pipes(pipe_commands, num_pipe_commands, num_pipes);
     launch_last_pipe(pipe_commands[num_pipe_commands - 1], num_pipes);
 
     for(int i = 0; i < num_pipes; i++) {
@@ -78,9 +108,10 @@ int launch_pipe(char* input) {
         close(fd[i][1]);
     }
 
-    for(int i = 0; i < num_pipe_commands; i++) {
-        wait(NULL);
-    }
+    int status = wait_for_all(num_pipe_commands);
+    
+    set_entry_end(entry);
+    add_history_entry(entry);
 
-    return 0;
+    return status;
 }

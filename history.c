@@ -30,3 +30,25 @@ void print_history_entry_details() {
                 entries[i]->pid, launch_time, duration_micro, entries[i]->command );
     }
 }
+
+void set_entry_command(char* input, struct history_entry* entry) {
+    // split modifies the original string so we must add the command to the history entry before splitting
+    // since char* input is being reused in main.c, future commands will be reflected in past entries!
+    // we must create a copy
+
+    char* input_copy = malloc(MAXLEN);
+    strcpy(input_copy, input);
+    entry->command = input_copy;
+}
+
+void set_entry_start(struct history_entry* entry) {
+    struct timeval start_time;
+    gettimeofday(&start_time, NULL);
+    entry->start_time = start_time;
+}
+
+void set_entry_end(struct history_entry* entry) {
+    struct timeval end_time;
+    gettimeofday(&end_time, NULL);
+    entry->end_time = end_time;
+}

@@ -20,22 +20,13 @@ int launch_background(char* input) {
 
 int launch_normal(char* input) {
 
-    // split modifies the original string so we must add the command to the history entry before splitting
-    // since char* input is being reused in main.c, future commands will be reflected in past entries!
-    // we must create a copy
-
-    char* input_copy = malloc(MAXLEN);
-    strcpy(input_copy, input);
-
     struct history_entry* entry = malloc(sizeof(struct history_entry));
-    entry->command = input_copy;
+    set_entry_command(input, entry);
 
     char* args[MAXLEN];
     split(input, " ", args);
 
-    struct timeval start_time;
-    gettimeofday(&start_time, NULL);
-    entry->start_time = start_time;
+    set_entry_start(entry);
 
     int pid = fork();
     entry->pid = pid;
@@ -49,10 +40,7 @@ int launch_normal(char* input) {
     int wstatus;
     wait(&wstatus);
 
-    struct timeval end_time;
-    gettimeofday(&end_time, NULL);
-    entry->end_time = end_time;
-
+    set_entry_end(entry);
     add_history_entry(entry);
 
     if (WIFEXITED(wstatus)) {
