@@ -2,6 +2,7 @@
 
 void handler(int signal) {
     print_history_entry_details();
+    exit(0);
 }
 
 void setup_signal_handlers() {

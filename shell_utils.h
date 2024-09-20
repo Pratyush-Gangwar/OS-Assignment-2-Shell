@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <sys/wait.h>
+#include <sys/time.h>
 #include <time.h>
 #include <signal.h>
 
@@ -11,8 +12,8 @@
 struct history_entry {
     char* command;
     pid_t pid;
-    time_t start_time;
-    time_t end_time;
+    struct timeval start_time;
+    struct timeval end_time;
 };
 
 int split(char* input, char* delim, char* output[]);

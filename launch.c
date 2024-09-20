@@ -38,10 +38,13 @@ int launch_normal(char* input) {
     char* args[MAXLEN];
     split(input, " ", args);
 
-    time_t start_time = time(NULL);
+    struct timeval start_time;
+    gettimeofday(&start_time, NULL);
     entry->start_time = start_time;
 
     int pid = fork();
+    entry->pid = pid;
+    
     if (pid == 0) {
         exec_wrapper(args);
     } 
@@ -51,7 +54,8 @@ int launch_normal(char* input) {
     int wstatus;
     wait(&wstatus);
 
-    time_t end_time = time(NULL);
+    struct timeval end_time;
+    gettimeofday(&end_time, NULL);
     entry->end_time = end_time;
 
     add_history_entry(entry);

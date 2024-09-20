@@ -60,5 +60,6 @@ void shell_loop() {
 }
 
 int main() {
+    setup_signal_handlers();
     shell_loop();
 }
