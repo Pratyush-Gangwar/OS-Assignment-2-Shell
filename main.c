@@ -27,7 +27,7 @@ void read_user_input(char* input) {
     input[ strlen(input) - 1 ] = '\0'; // last character is newline
 }
 
-int launch(char* input, struct history_entry entries[]) {
+int launch(char* input, struct history_entry* entries[]) {
     int status;
 
     if ( strchr(input, '&') != NULL ) {
@@ -48,7 +48,7 @@ int launch(char* input, struct history_entry entries[]) {
 void shell_loop() {
     int status;
     char input[MAXLEN];
-    struct history_entry entries[MAXLEN];
+    struct history_entry* entries[MAXLEN];
 
     do {
         print_prompt();
