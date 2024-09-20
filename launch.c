@@ -1,9 +1,9 @@
 #include "shell_utils.h"
 
-void exec_wrapper(char* args[], struct history_entry* history_entries[]) {
+void exec_wrapper(char* args[]) {
 
     if (strcmp(args[0], "history") == 0) {
-        print_history_entries(history_entries);
+        print_history_entry_names();
         exit(0);
     }
 
@@ -23,7 +23,7 @@ int launch_pipe(char* input) {
 
 }
 
-int launch_normal(char* input, struct history_entry* history_entries[]) {
+int launch_normal(char* input) {
 
     // split modifies the original string so we must add the command to the history entry before splitting
     // since char* input is being reused in main.c, future commands will be reflected in past entries!
@@ -43,7 +43,7 @@ int launch_normal(char* input, struct history_entry* history_entries[]) {
 
     int pid = fork();
     if (pid == 0) {
-        exec_wrapper(args, history_entries);
+        exec_wrapper(args);
     } 
     
     // no need for else because forked children call exec   
@@ -54,7 +54,7 @@ int launch_normal(char* input, struct history_entry* history_entries[]) {
     time_t end_time = time(NULL);
     entry->end_time = end_time;
 
-    add_history_entry(entry, history_entries);
+    add_history_entry(entry);
 
     if (WIFEXITED(wstatus)) {
         return WEXITSTATUS(wstatus);

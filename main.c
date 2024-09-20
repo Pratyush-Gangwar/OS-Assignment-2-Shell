@@ -1,5 +1,7 @@
 #include "shell_utils.h"
 
+struct history_entry* entries[MAXLEN];
+
 void print_prompt() {
     char cwd[MAXLEN];
     if (getcwd(cwd, MAXLEN) == NULL) {
@@ -27,7 +29,7 @@ void read_user_input(char* input) {
     input[ strlen(input) - 1 ] = '\0'; // last character is newline
 }
 
-int launch(char* input, struct history_entry* entries[]) {
+int launch(char* input) {
     int status;
 
     if ( strchr(input, '&') != NULL ) {
@@ -39,7 +41,7 @@ int launch(char* input, struct history_entry* entries[]) {
     }
 
     else {
-        status = launch_normal(input, entries);
+        status = launch_normal(input);
     }
 
     return status;
@@ -48,12 +50,11 @@ int launch(char* input, struct history_entry* entries[]) {
 void shell_loop() {
     int status;
     char input[MAXLEN];
-    struct history_entry* entries[MAXLEN];
 
     do {
         print_prompt();
         read_user_input(input);
-        status = launch(input, entries);
+        status = launch(input);
     } while (status == 0);
 
 }
