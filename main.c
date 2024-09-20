@@ -32,8 +32,36 @@ void read_user_input(char* input) {
     input[ strlen(input) - 1 ] = '\0'; // last character is newline
 }
 
-int launch() {
+int launch_background(char* input) {
+    return 0;
+}
 
+int launch_pipe(char* input) {
+    return 0;
+
+}
+
+int launch_normal(char* input) {
+    return 0;
+
+}
+
+int launch(char* input) {
+    int status;
+
+    if ( strchr(input, '&') != NULL ) {
+        status = launch_background(input);
+    }
+
+    else if ( strchr(input, '|') != NULL ) {
+        status = launch_pipe(input);
+    }
+
+    else {
+        status = launch_normal(input);
+    }
+
+    return status;
 }
 
 void shell_loop() {
@@ -43,8 +71,8 @@ void shell_loop() {
     do {
         print_prompt();
         read_user_input(input);
-        status = launch();
-    } while (status != 0);
+        status = launch(input);
+    } while (status == 0);
 
 }
 
