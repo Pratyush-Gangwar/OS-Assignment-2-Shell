@@ -28,11 +28,20 @@ void print_prompt() {
 }
 
 void read_user_input(char* input) {
-    fgets(input, MAXLEN, stdin); // gets is deprecated
-    input[ strlen(input) - 1 ] = '\0'; // last character is newline
+    // gets is deprecated
+    if (fgets(input, MAXLEN, stdin) == NULL) {
+        perror("read_user_input fgets error: ");
+        exit(1);
+    } 
+
+    // last character is newline
+    // strlen doesn't give errors
+    input[ strlen(input) - 1 ] = '\0'; 
 }
 
 int launch(char* input) {
+    // strchr doesn't give errors
+
     int status;
 
     if ( strchr(input, '&') != NULL ) {
@@ -58,9 +67,17 @@ void shell_loop() {
     char input[MAXLEN];
 
     do {
+        
         print_prompt();
         read_user_input(input);
+
+        // blank line - don't launch
+        if ( strlen(input) == 0 ) {
+            continue;
+        }
+
         launch(input);
+
     } while (1);
 
 }
