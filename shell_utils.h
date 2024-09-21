@@ -43,5 +43,5 @@ pid_t fork_wrapper();
 void* malloc_wrapper(size_t size);
 int dup2_wrapper(int oldfd, int newfd);
 int close_wrapper(int fd);
-
 int gettimeofday_wrapper(struct timeval* tv, struct timezone* tz);
+int sigaction_wrapper(int signum, const struct sigaction* act, struct sigaction* oldact);

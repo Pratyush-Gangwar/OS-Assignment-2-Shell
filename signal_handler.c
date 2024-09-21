@@ -16,22 +16,29 @@ void background_handler(int signal, siginfo_t* info, void* ucontext) {
     
     if (entry != NULL) {
         set_entry_end(entry);
-        waitpid(entry->pid, NULL, WNOHANG); // reap the child
+
+        // reap the child
+        if (waitpid(entry->pid, NULL, WNOHANG) == -1) {
+            perror("waitpid error ");
+            exit(1);
+        } 
     }
 }
 
 void setup_signal_handlers() {
+    // memset doesn't give errors
+
     struct sigaction history_sa;
     memset(&history_sa, 0, sizeof(struct sigaction));
     history_sa.sa_handler = history_handler;
 
-    sigaction(SIGINT, &history_sa, NULL);
-    sigaction(SIGHUP, &history_sa, NULL);
+    sigaction_wrapper(SIGINT, &history_sa, NULL);
+    sigaction_wrapper(SIGHUP, &history_sa, NULL);
 
     struct sigaction background_sa;
     memset(&background_sa, 0, sizeof(struct sigaction));
     background_sa.sa_flags = SA_SIGINFO | SA_RESTART;
     background_sa.sa_sigaction = background_handler;
 
-    sigaction(SIGCHLD, &background_sa, NULL);
+    sigaction_wrapper(SIGCHLD, &background_sa, NULL);
 }

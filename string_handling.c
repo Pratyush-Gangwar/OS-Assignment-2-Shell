@@ -1,5 +1,7 @@
 #include "shell_utils.h"
 
+// no errors given by strtok or isspace
+
 // return value is number of parts
 int split(char* input, char* delim, char* output[]) {
     output[0] = strtok(input, delim);

@@ -64,3 +64,14 @@ int gettimeofday_wrapper(struct timeval* tv, struct timezone* tz) {
 
     return ret;
 }
+
+int sigaction_wrapper(int signum, const struct sigaction* act, struct sigaction* oldact) {
+    int ret = sigaction(signum, act, oldact);
+
+    if (ret == -1) {
+        perror("sigaction error:");
+        exit(1);
+    }
+
+    return ret;
+}
