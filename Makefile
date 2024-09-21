@@ -1,2 +1,5 @@
-main.out : main.c shell_utils.h string_handling.c launch.c history.c signal_handler.c launch_pipe.c error_handling.c
-	gcc main.c string_handling.c launch.c history.c signal_handler.c launch_pipe.c error_handling.c -g -o main.out
+main.out : main.c ./utils/shell_utils.h ./utils/string_handling.c ./utils/launch.c ./utils/history.c ./utils/signal_handler.c ./utils/launch_pipe.c ./utils/error_handling.c
+	gcc main.c ./utils/string_handling.c ./utils/launch.c ./utils/history.c ./utils/signal_handler.c ./utils/launch_pipe.c ./utils/error_handling.c -g -o main.out
+
+make clean:
+	rm main.out

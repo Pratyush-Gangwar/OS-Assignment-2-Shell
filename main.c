@@ -1,4 +1,4 @@
-#include "shell_utils.h"
+#include "./utils/shell_utils.h"
 
 #define RED "\033[31m"
 #define RESET "\033[0m"
