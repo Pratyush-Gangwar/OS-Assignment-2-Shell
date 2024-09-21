@@ -23,6 +23,11 @@ void print_history_entry_details() {
         struct timeval end_time = entries[i]->end_time;
 
         char* launch_time = ctime(&start_time.tv_sec);
+        if (launch_time == NULL) {
+            perror("print_history_entry_details ctime error: ");
+            exit(1);
+        }
+
         launch_time[ strlen(launch_time) - 1 ] = '\0'; // remove \n at the end
 
         int duration_micro = ( end_time.tv_sec  * 1000000 + end_time.tv_usec ) - ( start_time.tv_sec * 1000000 + start_time.tv_usec );
@@ -43,13 +48,13 @@ void set_entry_command(char* input, struct history_entry* entry) {
 
 void set_entry_start(struct history_entry* entry) {
     struct timeval start_time;
-    gettimeofday(&start_time, NULL);
+    gettimeofday_wrapper(&start_time, NULL);
     entry->start_time = start_time;
 }
 
 void set_entry_end(struct history_entry* entry) {
     struct timeval end_time;
-    gettimeofday(&end_time, NULL);
+    gettimeofday_wrapper(&end_time, NULL);
     entry->end_time = end_time;
 }
 

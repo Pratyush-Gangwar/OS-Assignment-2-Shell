@@ -53,3 +53,14 @@ int close_wrapper(int fd) {
 
     return ret;
 }
+
+int gettimeofday_wrapper(struct timeval* tv, struct timezone* tz) {
+    int ret = gettimeofday(tv, tz);
+
+    if (ret == -1) {
+        perror("gettimeofday error:");
+        exit(1);
+    }
+
+    return ret;
+}
