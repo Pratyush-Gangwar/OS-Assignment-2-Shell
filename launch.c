@@ -33,7 +33,7 @@ void split_and_run(char* input, struct history_entry* entry) {
 }
 
 int launch_background(char* input) {
-    struct history_entry* entry = malloc(sizeof(struct history_entry));
+    struct history_entry* entry = malloc_wrapper(sizeof(struct history_entry));
     set_entry_command(input, entry);
     add_history_entry(entry);
     split_and_run(input, entry);
@@ -45,7 +45,7 @@ int launch_background(char* input) {
 
 int launch_normal(char* input) {
 
-    struct history_entry* entry = malloc(sizeof(struct history_entry));
+    struct history_entry* entry = malloc_wrapper(sizeof(struct history_entry));
     set_entry_command(input, entry);
     split_and_run(input, entry);
 

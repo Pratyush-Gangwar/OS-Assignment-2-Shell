@@ -21,3 +21,35 @@ pid_t fork_wrapper() {
 
     return pid;
 }
+
+void* malloc_wrapper(size_t size) {
+    void* ptr = malloc(size);
+
+    if (ptr == NULL) {
+        perror("malloc error: ");
+    }
+
+    return ptr;
+}
+
+int dup2_wrapper(int oldfd, int newfd) {
+    int fd = dup2(oldfd, newfd);
+
+    if (fd == -1) {
+        perror("dup2 error: ");
+        exit(1);
+    }
+
+    return fd;
+}
+
+int close_wrapper(int fd) {
+    int ret = close(fd);
+
+    if (ret == -1) {
+        perror("close error: ");
+        exit(1);
+    }
+
+    return ret;
+}
