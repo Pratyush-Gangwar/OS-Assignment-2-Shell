@@ -15,3 +15,16 @@ int split(char* input, char* delim, char* output[]) {
     output[i] = NULL; // ensure NULL termination
     return i;
 }
+
+bool is_blank_line(char* input) {
+
+    while(*input != '\0') {
+        if (!isspace(*input)) {
+            return false;
+        }
+
+        input++;
+    }
+
+    return true;
+}

@@ -6,6 +6,8 @@
 #include <sys/time.h>
 #include <time.h>
 #include <signal.h>
+#include <stdbool.h>
+#include <ctype.h>
 
 #define MAXLEN 1000
 
@@ -17,6 +19,7 @@ struct history_entry {
 };
 
 int split(char* input, char* delim, char* output[]);
+bool is_blank_line(char* input);
 
 int launch_background(char* input);
 int launch_pipe(char* input);

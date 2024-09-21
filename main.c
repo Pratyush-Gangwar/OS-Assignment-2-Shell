@@ -72,7 +72,7 @@ void shell_loop() {
         read_user_input(input);
 
         // blank line - don't launch
-        if ( strlen(input) == 0 ) {
+        if ( is_blank_line(input) ) {
             continue;
         }
 
