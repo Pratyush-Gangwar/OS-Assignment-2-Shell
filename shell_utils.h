@@ -37,3 +37,6 @@ void set_entry_end(struct history_entry* entry);
 struct history_entry* get_entry_by_pid(int pid);
 
 void setup_signal_handlers();
+
+pid_t wait_wrapper(int* wstatus);
+pid_t fork_wrapper();

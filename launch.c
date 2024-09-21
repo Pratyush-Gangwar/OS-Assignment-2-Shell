@@ -22,17 +22,12 @@ void split_and_run(char* input, struct history_entry* entry) {
 
     set_entry_start(entry);
 
-    int pid = fork();
+    int pid = fork_wrapper();
     entry->pid = pid;
 
     if (pid == 0) {
         exec_wrapper(args);
     } 
-
-    else if (pid < 0) {
-        perror("split_and_run fork error: ");
-        exit(1);
-    }
     
     // no need for else because forked children call exec   
 }
@@ -55,11 +50,8 @@ int launch_normal(char* input) {
     split_and_run(input, entry);
 
     int wstatus;
-    if (wait(&wstatus) == -1) {
-        perror("launch_normal wait error: ");
-        exit(1);
-    }
-
+    wait_wrapper(&wstatus);
+    
     set_entry_end(entry);
     add_history_entry(entry);
 
