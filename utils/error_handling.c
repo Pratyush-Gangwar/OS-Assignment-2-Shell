@@ -1,5 +1,8 @@
 #include "shell_utils.h"
 
+// just wrapper functions around syscall that handle errors 
+// collated in one place to reduce code repetition
+
 pid_t wait_wrapper(int* wstatus) {
     pid_t pid = wait(wstatus);
 

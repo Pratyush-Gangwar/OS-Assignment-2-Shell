@@ -1,29 +1,35 @@
 #include "./utils/shell_utils.h"
 
+// ANSI coloring
 #define RED "\033[31m"
 #define RESET "\033[0m"
 
-struct history_entry* entries[MAXLEN];
+struct history_entry* entries[MAXLEN]; // accessed in history.c
 
 void print_prompt() {
+
+    // current working directory
     char cwd[MAXLEN];
     if (getcwd(cwd, MAXLEN) == NULL) {
         perror("print_prompt getcwd error: ");
         exit(1);
     }
 
+    // username
     char username[MAXLEN];
     if( getlogin_r(username, MAXLEN) != 0 ) {
         perror("print_prompt getlogin_r error: ");
         exit(1);
     }
 
+    // machine name
     char machinename[MAXLEN];
     if( gethostname(machinename, MAXLEN) == -1) {
         perror("print_prompt gethostname error: ");
         exit(1);
     }
 
+    // color the prompt red and then reset to the default colors for user input
     printf(RED "%s@%s:%s$ " RESET, username, machinename, cwd);
 }
 
@@ -46,6 +52,7 @@ int launch(char* input) {
 
     if ( strchr(input, '&') != NULL ) {
 
+        // return & 
         char* ampersand_ptr = strchr(input, '&');
         *ampersand_ptr = '\0';
 

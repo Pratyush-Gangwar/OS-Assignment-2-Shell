@@ -5,6 +5,7 @@ void history_handler(int signal) {
     exit(0);
 }
 
+// different function prototype for sa_handler and sa_sigaction
 void background_handler(int signal, siginfo_t* info, void* ucontext) {
     struct history_entry* entry = get_entry_by_pid(info->si_pid);
 
@@ -33,11 +34,17 @@ void setup_signal_handlers() {
     history_sa.sa_handler = history_handler;
 
     sigaction_wrapper(SIGINT, &history_sa, NULL);
-    sigaction_wrapper(SIGHUP, &history_sa, NULL);
+
+
 
     struct sigaction background_sa;
     memset(&background_sa, 0, sizeof(struct sigaction));
-    background_sa.sa_flags = SA_SIGINFO | SA_RESTART;
+
+    // SA_SIGINFO so that siginfo_t struct is passed to handler
+    // SA_RESTART so that interrupted syscalls (such as fgets) are resumed. otherwise, we may run into errors
+    background_sa.sa_flags = SA_SIGINFO | SA_RESTART; 
+
+    // since we used SA_SIGINFO, we must specify sa_sigaction and not sa_handler
     background_sa.sa_sigaction = background_handler;
 
     sigaction_wrapper(SIGCHLD, &background_sa, NULL);

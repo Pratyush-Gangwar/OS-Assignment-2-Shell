@@ -18,11 +18,11 @@ void exec_wrapper(char* args[]) {
 
 void split_and_run(char* input, struct history_entry* entry) {
     char* args[MAXLEN];
-    split(input, " ", args);
+    split(input, " ", args); // split at spaces to get command arguments and command name
 
-    set_entry_start(entry);
+    set_entry_start(entry); // set start_time attribute of entry
 
-    int pid = fork_wrapper();
+    int pid = fork_wrapper(); 
     entry->pid = pid;
 
     if (pid == 0) {
@@ -45,19 +45,19 @@ int launch_background(char* input) {
 
 int launch_normal(char* input) {
 
-    struct history_entry* entry = malloc_wrapper(sizeof(struct history_entry));
-    set_entry_command(input, entry);
+    struct history_entry* entry = malloc_wrapper(sizeof(struct history_entry)); // need to malloc because we want it to persist outside the function
+    set_entry_command(input, entry); // set command member of entry
     split_and_run(input, entry);
 
     int wstatus;
-    wait_wrapper(&wstatus);
+    wait_wrapper(&wstatus); // wait for the child to terminate
     
-    set_entry_end(entry);
-    add_history_entry(entry);
+    set_entry_end(entry); // set end_time member of entry
+    add_history_entry(entry); // add entry to the global array
 
     if (WIFEXITED(wstatus)) {
         return WEXITSTATUS(wstatus);
     }
 
-    return 1;
+    return 1; // if the child didn't use exit(), then WIFEXITED is false and we will land here. this represents abnormal termination
 }
