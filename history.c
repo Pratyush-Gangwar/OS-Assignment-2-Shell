@@ -52,3 +52,13 @@ void set_entry_end(struct history_entry* entry) {
     gettimeofday(&end_time, NULL);
     entry->end_time = end_time;
 }
+
+struct history_entry* get_entry_by_pid(int pid) {
+    for(int i = 0; i < history_idx; i++) {
+        if (entries[i]->pid == pid) {
+            return entries[i];
+        }
+    }
+
+    return NULL;
+}
