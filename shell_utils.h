@@ -31,5 +31,6 @@ void print_history_entry_details();
 void set_entry_command(char* input, struct history_entry* entry);
 void set_entry_start(struct history_entry* entry);
 void set_entry_end(struct history_entry* entry);
+struct history_entry* get_entry_by_pid(int pid);
 
 void setup_signal_handlers();

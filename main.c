@@ -1,17 +1,20 @@
 #include "shell_utils.h"
 
+#define RED "\033[31m"
+#define RESET "\033[0m"
+
 struct history_entry* entries[MAXLEN];
 
 void print_prompt() {
     char cwd[MAXLEN];
     if (getcwd(cwd, MAXLEN) == NULL) {
-        perror("print_promot getcwd error: ");
+        perror("print_prompt getcwd error: ");
         exit(1);
     }
 
     char username[MAXLEN];
     if( getlogin_r(username, MAXLEN) != 0 ) {
-        perror("print_promt getlogin_r error: ");
+        perror("print_prompt getlogin_r error: ");
         exit(1);
     }
 
@@ -21,7 +24,7 @@ void print_prompt() {
         exit(1);
     }
 
-    printf("%s@%s:%s$ ", username, machinename, cwd);
+    printf(RED "%s@%s:%s$ " RESET, username, machinename, cwd);
 }
 
 void read_user_input(char* input) {
@@ -33,6 +36,10 @@ int launch(char* input) {
     int status;
 
     if ( strchr(input, '&') != NULL ) {
+
+        char* ampersand_ptr = strchr(input, '&');
+        *ampersand_ptr = '\0';
+
         status = launch_background(input);
     }
 
@@ -48,14 +55,13 @@ int launch(char* input) {
 }
 
 void shell_loop() {
-    int status;
     char input[MAXLEN];
 
     do {
         print_prompt();
         read_user_input(input);
-        status = launch(input);
-    } while (status == 0);
+        launch(input);
+    } while (1);
 
 }
 

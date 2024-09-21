@@ -14,15 +14,7 @@ void exec_wrapper(char* args[]) {
     }
 }
 
-int launch_background(char* input) {
-    return 0;
-}
-
-int launch_normal(char* input) {
-
-    struct history_entry* entry = malloc(sizeof(struct history_entry));
-    set_entry_command(input, entry);
-
+void split_and_run(char* input, struct history_entry* entry) {
     char* args[MAXLEN];
     split(input, " ", args);
 
@@ -36,6 +28,24 @@ int launch_normal(char* input) {
     } 
     
     // no need for else because forked children call exec   
+}
+
+int launch_background(char* input) {
+    struct history_entry* entry = malloc(sizeof(struct history_entry));
+    set_entry_command(input, entry);
+    add_history_entry(entry);
+    split_and_run(input, entry);
+
+    // no wait
+
+    return 0;
+}
+
+int launch_normal(char* input) {
+
+    struct history_entry* entry = malloc(sizeof(struct history_entry));
+    set_entry_command(input, entry);
+    split_and_run(input, entry);
 
     int wstatus;
     wait(&wstatus);
