@@ -1,6 +1,6 @@
 #include "shell_utils.h"
 
-extern struct history_entry* entries[]; // refers to entries variable in global
+static struct history_entry* entries[MAXLEN]; // accessed in history.c
 static int history_idx = 0; // static to prevent it from being accessed outside history.c
 
 void add_history_entry(struct history_entry* entry) {

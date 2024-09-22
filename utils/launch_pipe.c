@@ -1,6 +1,6 @@
 #include "shell_utils.h"
 
-int fd[MAXLEN/2][2]; // global fd array
+static int fd[MAXLEN/2][2]; // global fd array
 
 int launch_first_pipe(char* first_command, int num_pipes) {
     // uses the pipe fd[0]
@@ -104,7 +104,9 @@ int wait_for_all(int num_pipe_commands) {
                 status = WEXITSTATUS(wstatus); // update status if the current command failed
             }
 
-        }
+        } 
+
+        status = 1; // abnormal termination (i.e, didnt call exit)
     }
 
     return status;

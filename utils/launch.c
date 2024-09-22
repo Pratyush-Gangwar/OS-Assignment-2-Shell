@@ -23,13 +23,14 @@ void split_and_run(char* input, struct history_entry* entry) {
     set_entry_start(entry); // set start_time attribute of entry
 
     int pid = fork_wrapper(); 
-    entry->pid = pid;
 
     if (pid == 0) {
         exec_wrapper(args);
     } 
     
-    // no need for else because forked children call exec   
+    // no need for else because forked children call exec
+    entry->pid = pid;
+       
 }
 
 int launch_background(char* input) {
